@@ -78,7 +78,7 @@ int main() {
 	Mdl_t * mdl = ouvrire_mdl("mdl.bin");
 	plumer_model(mdl);
 	//montrer_Y_du_model(mdl, btcusdt);
-	tester_le_model(mdl, btcusdt);
+	//tester_le_model(mdl, btcusdt);
 
 	//	=========================================================
 	//	=========================================================

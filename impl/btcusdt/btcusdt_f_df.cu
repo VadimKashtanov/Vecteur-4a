@@ -16,7 +16,7 @@ static __global__ void k__f_df_btcusdt(
 	//uint _t = threadIdx.y + blockIdx.y * blockDim.y;
 	//uint  i = threadIdx.z + blockIdx.z * blockDim.z;
 	//
-	if (_y < (L*N)/* && _t < T *//*&& i < I*/) {
+	if (_y < (L*N)) {
 		float s = 0;
 		FOR(0, i, I) {
 			FOR(0, _t, GRAND_T) {
@@ -30,25 +30,19 @@ static __global__ void k__f_df_btcusdt(
 					assert(__y >= -100 && __y <= +100);
 					//
 					float coef = (float)(GRAND_T * MEGA_T * (I*L*N));
-					s       += ( score_p2(__y, __w, 2));
+					s       += ( score_p2(__y, __w, 2)) / coef;
 					float ds = (dscore_p2(__y, __w, 2)) / coef;
 					//
-					atomicAdd(&dy[ty*I*N*L + i*L*N + _y], ds);
+					//atomicAdd(&dy[ty*I*N*L + i*L*N + _y], ds);
+					dy[ty*I*N*L + i*L*N + _y] = ds;
 				}
 			}
 		}
 		//
-		atomicAdd(&S[0], s);
+		//atomicAdd(&S[0], s);
+		S[_y] = s;
 	}
 };
-
-/*
-A fair :
-	1) Finir d'ajouter les jour, mois année
-	2) Tester le .T dar.bin
-	3) ajouter le module de séparation des I (et embede et positionnal)
-	4) Ajouter une union 4
-*/
 
 float f_df_btcusdt(BTCUSDT_t * btcusdt, float * y__d, float * dy__d, uint * ts__d) {
 	uint I=btcusdt->I;
@@ -56,8 +50,8 @@ float f_df_btcusdt(BTCUSDT_t * btcusdt, float * y__d, float * dy__d, uint * ts__
 	uint N=btcusdt->N;
 	uint T=btcusdt->T;
 	//
-	float * S__d = cudalloc<float>(1);
-	k__f_df_btcusdt<<<dim3(KERD((L*N), 8)/*,KERD(GRAND_T, 8), *//*KERD(I,4)*/), dim3(8/*,8,*//*4*/)>>>(
+	float * S__d = cudalloc<float>(L*N);
+	k__f_df_btcusdt<<<dim3(KERD((L*N), 32)/*,KERD(GRAND_T, 8), *//*KERD(I,4)*/), dim3(32/*,8,*//*4*/)>>>(
 		S__d,
 		y__d, dy__d,
 		btcusdt->serie__d,
@@ -67,11 +61,9 @@ float f_df_btcusdt(BTCUSDT_t * btcusdt, float * y__d, float * dy__d, uint * ts__
 	ATTENDRE_CUDA();
 	//
 	//
-	float * S = gpu_vers_cpu<float>(S__d, 1);
-	//
-	float coef = (float)(GRAND_T * MEGA_T * (I*L*N));
-	float score = S[0]/coef;// / ((float)(MEGA_T * btcusdt->I * btcusdt->L * btcusdt->N));
-	//
+	float * S = gpu_vers_cpu<float>(S__d, L*N);
+	float score = 0;
+	FOR(0, i, L*N) score += S[i];
 	//
 	cudafree<float>(S__d);
 	    free       (S   );

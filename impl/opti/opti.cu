@@ -57,9 +57,9 @@ void opti(
 			float* p0 = pourcent_btcusdt(btcusdt, mdl->inst[mdl->sortie]->y__d, ts__d);
 			//
 			printf("%3.i/%3.i score = %f inconnue=(", i,I,s);
-			FOR(0, j, INTERVS) printf("%f,", p0[j]);
+			FOR(0, j, INTERVS) printf("%f%%,", roundf(p0[j]*100*1000)/1000);
 			printf(") connue=(");
-			FOR(0, j, INTERVS) printf("%f,", p0[INTERVS+j]);
+			FOR(0, j, INTERVS) printf("%f%%,", roundf(p0[INTERVS+j]*100*1000)/1000);
 			printf(")\n");
 		};
 	};

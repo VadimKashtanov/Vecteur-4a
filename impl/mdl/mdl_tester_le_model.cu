@@ -52,7 +52,7 @@ void tester_le_model(Mdl_t * mdl, BTCUSDT_t * btcusdt) {
 	//
 	float S = mdl_S(mdl, btcusdt, ts__d);
 	//
-	float _1E5 = 2e-2;//5e-3;
+	float _1E5 = 5e-3;
 	uint lp = 0;
 	FOR(0, i, mdl->insts) {
 		printf("#### INSTRUCTION %i (%s Y=%i) ####\n",
@@ -85,7 +85,7 @@ void tester_le_model(Mdl_t * mdl, BTCUSDT_t * btcusdt) {
 	};
 	printf("1E5  === dp\n");
 	//
-	FOR(0, i, mdl->insts) if (grad_cuda[i]) free(grad_cuda[i]);
+	FOR(0, i, mdl->insts) if (mdl->inst[i]->P > 0) free(grad_cuda[i]);
 	//
 	cudafree<uint>(ts__d);
 };

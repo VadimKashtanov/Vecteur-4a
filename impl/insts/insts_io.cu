@@ -14,7 +14,6 @@ static Inst_t * lire_tete_instruction(FILE * fp) {
 		FREAD(&ret->x_Y  [__x], sizeof(uint), 1, fp);
 		FREAD(&ret->x_pos[__x], sizeof(uint), 1, fp);
 		FREAD(&ret->x_t  [__x], sizeof(uint), 1, fp);
-		printf(":: %i %i %i\n", ret->x_Y  [__x], ret->x_pos[__x], ret->x_t  [__x]);
 	}
 	
 	//
@@ -54,7 +53,6 @@ Inst_t * lire_inst_pre_mdl(FILE * fp) {
 	Inst_t * ret = lire_tete_instruction(fp);
 
 	//	--- Y & Y' ---
-	printf("%i %i %i\n", ret->Y, ret->L, ret->P);
 	ret-> y__d = cudalloc<float>(MEGA_T * GRAND_T * ret->Y);
 	ret-> l__d = cudalloc<float>(MEGA_T * GRAND_T * ret->L);
 	ret->dy__d = cudalloc<float>(MEGA_T * GRAND_T * ret->Y);

@@ -5,7 +5,6 @@
 //	------- Instructions ---------
 
 #include "insts/entree.cuh"
-#include "insts/sortie.cuh"
 #include "insts/select_vect.cuh"
 
 #include "insts/drop_vecteur.cuh"
@@ -46,7 +45,6 @@
 
 fonctions_insts_t fonctions_insts[INSTS] = {
 	fi_entree,
-	fi_sortie,
 	fi_select_vect,
 	//
 	fi_drop_vecteur,

@@ -38,5 +38,7 @@ class SPLIT_4(Module_Mdl):
 			's3' : {0 : ('x',0)},
 		}
 
+		self.sorties = [-4,-3,-2,-1]
+
 		self.cree_elements_connections()
 		return self.ix

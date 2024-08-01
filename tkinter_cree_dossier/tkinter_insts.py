@@ -40,19 +40,6 @@ class i_Entree(Inst):
 		#	Params
 		assert len(self.params) == 0
 
-class i_Sortie(Inst):
-	nom = "Sortie"
-	params = []
-	params_str = []
-	X = [0]
-	Y = 0
-
-	def assert_coherance(self):
-		assert self.X[0] == self.Y
-
-		#	Params
-		assert len(self.params) == 0
-
 class i_Select_Vect(Inst):
 	nom = "Select Vect"
 	params = [1,0]
@@ -473,7 +460,6 @@ class i_Transpose2d(Inst):
 ##########################################
 liste_insts = [
 	i_Entree,
-	i_Sortie,
 	i_Select_Vect,
 	#
 	i__Drop_Vecteur,

@@ -8,11 +8,9 @@ class ATTENTION_2D(Module_Mdl):
 	X, Y = [0], [0]
 	X_noms, Y_noms = ["X"], ["Y"]
 	params = {
-		'Ax' : 1,
-		'Ay' : 1,
-		'Clef' : 1,
-		'Vx' : 1,
-		'C0' : 1,
+		'dimention' : 1,
+		'mots'      : 1,
+		'têtes'     : 1,
 	}
 	def cree_ix(self):
 		#	Params
@@ -65,15 +63,15 @@ class ATTENTION_2D(Module_Mdl):
 		self.cree_elements_connections()
 		return self.ix
 
-class Encodeur(Module_Mdl):
+class ENCODEUR(Module_Mdl):
 	bg, fg = 'light blue', 'black'
-	nom = "[Encodeur]"
+	nom = "[ENCODEUR]"
 	X, Y = [0], [0]
 	X_noms, Y_noms = ["X"], ["Y"]
 	params = {
-		'Ax' : 1,
-		'Ay' : 1,
-		'C0' : 1,
+		'dimention' : 1,
+		'mots'      : 1,
+		'têtes'     : 1,
 	}
 	def cree_ix(self):
 		#	Params
@@ -96,8 +94,6 @@ class Encodeur(Module_Mdl):
 		self.elements = {
 			'x' : MODULE_i_Y(X=[Ax*Ay*C0], Y=[Ax*Ay*C0], params={}).cree_ix(),
 
-			'positionnal encoding' : "positionnal encoding (apres le embeding)",
-			
 			'norme_x'   : BATCH_NORM(X=[Ax*Ay*C0], Y=[Ax*Ay*C0], params={'C0':C0*Ay}).cree_ix(),
 			'attention' : ATTENTION_2D (X=[Ax*Ay*C0], Y=[Ax*Ay*C0], params={'Ax':Ax,'Ay':Ay,'Clef':Clef,'Vx':Vx,'C0':C0}).cree_ix(),
 
@@ -113,13 +109,13 @@ class Encodeur(Module_Mdl):
 		self.connections = {
 			'x' : {0:None},
 
-			#'norme_x' : {0:('x',0)},
-			'attention' : {0:('x',0)},#{0:('norme_x',0)},
+			'norme_x' : {0:('x',0)},
+			'attention' : {0:('norme_x',0)},
 
 			'somme0' : {0:('x',0), 1:('attention',0)},
 
 			'norme_somme0' : {0:('somme0',0)},
-			'GeLu(Wx+b)' : {0:('somme0',0)},#{0:('norme_somme0',0)},
+			'GeLu(Wx+b)' : {0:('norme_somme0',0)},
 			'W@relu+b' : {0:('GeLu(Wx+b)',0)},
 
 			'somme1' : {0:('somme0',0), 1:('W@relu+b',0)}
@@ -127,3 +123,58 @@ class Encodeur(Module_Mdl):
 
 		self.cree_elements_connections()
 		return self.ix
+
+class DECODEUR(Module_Mdl):
+	bg, fg = 'light blue', 'black'
+	nom = "[EMBEDE+POSITION]"
+	X, Y = [0], [0]
+	X_noms, Y_noms = ["X"], ["Y"]
+	params = {
+		'dimention' : 1,
+		'mots'      : 1,
+		'têtes'     : 1,
+	}
+
+class EMBEDE_ET_POSITION(Module_Mdl):
+	bg, fg = 'light blue', 'black'
+	nom = "[EMBEDE+POSITION]"
+	X, Y = [0], [0]
+	X_noms, Y_noms = ["X"], ["Y"]
+	params = {
+		'dimention' : 1,
+		'mots'      : 1,
+		'têtes'     : 1,
+	}
+
+class ANTI_EMBEDE(Module_Mdl):
+	bg, fg = 'light blue', 'black'
+	nom = "[ANTI EMBEDE]"
+	X, Y = [0], [0]
+	X_noms, Y_noms = ["X"], ["Y"]
+	params = {
+		'dimention' : 1,
+		'mots'      : 1,
+		'têtes'     : 1,
+	}
+
+class ENCODEUR_CHAINE(Module_Mdl):
+	bg, fg = 'light blue', 'black'
+	nom = "[ENCODEUR] Chaine"
+	X, Y = [0], [0]
+	X_noms, Y_noms = ["X"], ["Y"]
+	params = {
+		'dimention' : 1,
+		'mots'      : 1,
+		'têtes'     : 1,
+	}
+
+class DECODEUR_CHAINE(Module_Mdl):
+	bg, fg = 'light blue', 'black'
+	nom = "[DECODEUR] Chaine"
+	X, Y = [0], [0]
+	X_noms, Y_noms = ["X"], ["Y"]
+	params = {
+		'dimention' : 1,
+		'mots'      : 1,
+		'têtes'     : 1,
+	}

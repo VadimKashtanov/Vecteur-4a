@@ -3,6 +3,8 @@ class Module_Mdl:
 	fg  = None
 	img = None
 	#
+	sorties = [-1]
+	#
 	def __init__(self, X=None, Y=None, params=None):
 		if X != None:
 			assert len(X) == len(self.X)
@@ -53,4 +55,8 @@ class Module_Mdl:
 		#	======================
 
 		for i in self.ix: i['sortie'] = False
-		self.ix[-1]['sortie'] = True
+
+		assert len(self.sorties) == len(self.Y)
+
+		for sortie in self.sorties:
+			self.ix[sortie]['sortie'] = True
